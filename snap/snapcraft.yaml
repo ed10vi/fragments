@@ -35,6 +35,7 @@ parts:
       wget https://sh.rustup.rs -O rustup-init.sh
       chmod +x rustup-init.sh
       ./rustup-init.sh -y
+      source /root/.cargo/env
       sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
       sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
       craftctl default
