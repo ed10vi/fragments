@@ -55,6 +55,7 @@ parts:
       - libssl-dev
       - libevent-dev
       - libappindicator-dev
+      - wget
     stage-packages:
       - libcurl4
       - libevent-2.1-7
