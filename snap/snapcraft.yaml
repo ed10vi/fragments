@@ -2,7 +2,7 @@ name: fragments
 adopt-info: fragments
 grade: stable
 confinement: strict
-base: core18
+base: core22
 
 slots:
   dbus:
@@ -13,7 +13,7 @@ slots:
 apps:
   fragments:
     command: usr/bin/fragments
-    extensions: [gnome-3-34]
+    extensions: [gnome]
     common-id: de.haeckerfelix.Fragments
     plugs:
       - network
@@ -27,25 +27,27 @@ parts:
     plugin: meson
     source: https://gitlab.gnome.org/World/Fragments.git
     source-type: git
-    source-tag: "1.4"
+    source-tag: "2.0.2"
     parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.appdata.xml]
     meson-parameters:
       - --prefix=/usr
     override-build: |
       sed --in-place '\|<id>de.haeckerfelix.Fragments</id>|a<icon type="stock">snap.fragments.de.haeckerfelix.Fragments</icon>' data/de.haeckerfelix.Fragments.appdata.xml.in
       sed --in-place 's|^Icon=.*|Icon=snap.fragments.de.haeckerfelix.Fragments|' data/de.haeckerfelix.Fragments.desktop.in
-      snapcraftctl build
+      craftctl default
     override-prime: |
-      snapcraftctl prime
+      craftctl default
       mkdir -p meta/gui
       cp -r usr/share/icons meta/gui/
       for i in `find meta/gui/icons -name "*.svg" -o -name "*.png"`
       do
-        mv $i "`dirname $i`/snap.$SNAPCRAFT_PROJECT_NAME.`basename $i`"
+        mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
       done
 
     build-packages:
       - cmake
+      - meson
+      - ninja-build
       - libcurl4-openssl-dev
       - libssl-dev
       - libevent-dev
