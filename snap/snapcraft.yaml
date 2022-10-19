@@ -54,5 +54,5 @@ parts:
       - libappindicator-dev
     stage-packages:
       - libcurl4
-      - libevent-2.1-6
-      - libminiupnpc10
+      - libevent-2.1-7
+      - libminiupnpc17
