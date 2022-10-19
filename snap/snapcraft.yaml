@@ -32,8 +32,8 @@ parts:
     meson-parameters:
       - --prefix=/usr
     override-build: |
-      sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' data/de.haeckerfelix.Fragments.metainfo.xml.in.in
-      sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' data/de.haeckerfelix.Fragments.desktop.in.in
+      sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' $CRAFT_PART_BUILD/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
+      sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' $CRAFT_PART_BUILD/data/de.haeckerfelix.Fragments.desktop.in.in
       craftctl default
     override-prime: |
       craftctl default
