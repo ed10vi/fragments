@@ -38,13 +38,13 @@ parts:
     override-build: |
       sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
       sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
+      patch $CRAFT_PART_SRC/src/main.rs $CRAFT_PROJECT_DIR/snap.patch
       craftctl default
     override-prime: |
       craftctl default
       mkdir -p meta/gui
       cp -r usr/share/icons meta/gui/
-      for i in `find meta/gui/icons -name "*.svg" -o -name "*.png"`
-      do
+      for i in `find meta/gui/icons -name "*.svg" -o -name "*.png"`; do
         mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
       done
     build-packages:
@@ -74,7 +74,7 @@ parts:
       $CRAFT_PART_SRC/rustup-init.sh -y --no-modify-path
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
       for i in `ls $RUSTUP_HOME/bin/`; do
-      ln -s ../share/rust/bin/$i $CRAFT_PART_INSTALL/usr/bin/$i
+        ln -s ../share/rust/bin/$i $CRAFT_PART_INSTALL/usr/bin/$i
       done
     override-prime: |
       echo 'Skip Prime'
