@@ -29,13 +29,13 @@ parts:
     source-type: git
     source-tag: "2.0.2"
     parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
+    after: [rustup]
+    build-environment:
+      - RUSTUP_HOME: $CRAFT_PROJECT_DIR/../parts/rustup/install/usr/share/rust
+      - CARGO_HOME: $CRAFT_PROJECT_DIR/../parts/rustup/install/usr/share/rust
     meson-parameters:
       - --prefix=/usr
     override-build: |
-      wget https://sh.rustup.rs -O rustup-init.sh
-      chmod +x rustup-init.sh
-      ./rustup-init.sh -y
-      source /root/.cargo/env
       sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
       sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
       craftctl default
@@ -47,7 +47,6 @@ parts:
       do
         mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
       done
-
     build-packages:
       - cmake
       - meson
@@ -61,3 +60,21 @@ parts:
       - libcurl4
       - libevent-2.1-7
       - libminiupnpc17
+
+  rustup:
+    plugin: nil
+    build-packages: [wget]
+    build-environment:
+      - RUSTUP_HOME: $CRAFT_PART_INSTALL/usr/share/rust
+      - CARGO_HOME: $CRAFT_PART_INSTALL/usr/share/rust
+    override-pull: |
+      wget https://sh.rustup.rs -O $CRAFT_PART_SRC/rustup-init.sh
+      chmod +x $CRAFT_PART_SRC/rustup-init.sh
+    override-build: |
+      $CRAFT_PART_SRC/rustup-init.sh -y --no-modify-path
+      mkdir -p $CRAFT_PART_INSTALL/usr/bin
+      for i in `ls $RUSTUP_HOME/bin/`; do
+      ln -s ../share/rust/bin/$i $CRAFT_PART_INSTALL/usr/bin/$i
+      done
+    override-prime: |
+      echo 'Skip Prime'
