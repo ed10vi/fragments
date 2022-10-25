@@ -23,6 +23,22 @@ apps:
       - removable-media
 
 parts:
+  transmission:
+    plugin: autotools
+    source: https://github.com/transmission/transmission.git
+    source-type: git
+    source-tag: "3.00"
+    autotools-configure-parameters:
+      - --without-gtk
+      - --without-cli
+      - --enable-daemon
+      - --disable-nls
+      - --prefix /usr
+      - --disable-dependency-tracking
+    override-build: |
+      patch $CRAFT_PART_SRC/daemon/daemon.c $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
+      craftctl default
+
   fragments:
     plugin: meson
     source: https://gitlab.gnome.org/World/Fragments.git
@@ -38,7 +54,7 @@ parts:
     override-build: |
       sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
       sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
-      patch $CRAFT_PART_SRC/src/main.rs $CRAFT_PROJECT_DIR/snap.patch
+      patch $CRAFT_PART_SRC/src/main.rs $CRAFT_PROJECT_DIR/fragments.patch
       craftctl default
     override-prime: |
       craftctl default
