@@ -47,8 +47,8 @@ parts:
     parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
     after: [rustup]
     build-environment:
-      - RUSTUP_HOME: $CRAFT_PROJECT_DIR/../parts/rustup/install/usr/share/rust
-      - CARGO_HOME: $CRAFT_PROJECT_DIR/../parts/rustup/install/usr/share/rust
+      - RUSTUP_HOME: $CRAFT_PART_BUILD/../../rustup/install/usr/share/rust
+      - CARGO_HOME: $CRAFT_PART_BUILD/../../rustup/install/usr/share/rust
     meson-parameters:
       - --prefix=/usr
     override-build: |
