@@ -1,5 +1,29 @@
---- src/main.rs	2022-10-21 18:42:53.607218019 +0200
-+++ src/main.rs	2022-10-21 18:42:49.463183260 +0200
+diff -Naur a/data/de.haeckerfelix.Fragments.desktop.in.in b/data/de.haeckerfelix.Fragments.desktop.in.in
+--- a/data/de.haeckerfelix.Fragments.desktop.in.in	2022-10-26 08:54:59.443283521 +0200
++++ b/data/de.haeckerfelix.Fragments.desktop.in.in	2022-10-26 12:31:11.047207595 +0200
+@@ -9,7 +9,7 @@
+ DBusActivatable=true
+ MimeType=x-scheme-handler/magnet;application/x-bittorrent;
+ # Translators: Do NOT translate or transliterate this text (this is an icon file name)!
+-Icon=@icon@
++Icon=snap.fragments.@icon@
+ Categories=GNOME;GTK;Utility;
+ Keywords=bittorrent;torrent;magnet;download;p2p;
+ # Translators: Do NOT translate or transliterate this text (these are enum types)!
+diff -Naur a/data/de.haeckerfelix.Fragments.metainfo.xml.in.in b/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
+--- a/data/de.haeckerfelix.Fragments.metainfo.xml.in.in	2022-10-26 08:54:43.931157537 +0200
++++ b/data/de.haeckerfelix.Fragments.metainfo.xml.in.in	2022-10-26 08:58:10.112680388 +0200
+@@ -2,6 +2,7 @@
+ <!-- Copyright 2022 Felix Häcker -->
+ <component type="desktop-application">
+   <id>de.haeckerfelix.Fragments</id>
++  <icon type="stock">snap.fragments.de.haeckerfelix.Fragments</icon>
+   <name>Fragments</name>
+   <summary>A BitTorrent Client</summary>
+   <translation type="gettext">fragments</translation>
+diff -Naur a/src/main.rs b/src/main.rs
+--- a/src/main.rs	2022-10-21 18:42:53.607218019 +0200
++++ b/src/main.rs	2022-10-21 18:42:49.463183260 +0200
 @@ -59,10 +59,13 @@
      textdomain(config::PKGNAME).unwrap();
  

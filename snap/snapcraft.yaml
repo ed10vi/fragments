@@ -36,7 +36,7 @@ parts:
       - --prefix /usr
       - --disable-dependency-tracking
     override-build: |
-      patch $CRAFT_PART_SRC/daemon/daemon.c $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
+      patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
       craftctl default
 
   fragments:
@@ -52,9 +52,7 @@ parts:
     meson-parameters:
       - --prefix=/usr
     override-build: |
-      sed --in-place '\|<id>@APP_ID@</id>|a<icon type="stock">snap.fragments.@APP_ID@</icon>' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
-      sed --in-place 's|^Icon=@APP_ID@|Icon=snap.fragments.@APP_ID@|' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
-      patch $CRAFT_PART_SRC/src/main.rs $CRAFT_PROJECT_DIR/fragments.patch
+      patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/fragments.patch
       craftctl default
     override-prime: |
       craftctl default
