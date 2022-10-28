@@ -10,11 +10,12 @@ slots:
     bus: session
     name: de.haeckerfelix.Fragments
 
+environment:
+  OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
+
 apps:
   fragments:
     command: usr/bin/fragments
-    environment:
-      OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
     extensions: [gnome]
     common-id: de.haeckerfelix.Fragments
     plugs:
