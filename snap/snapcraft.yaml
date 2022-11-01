@@ -10,6 +10,9 @@ slots:
     bus: session
     name: de.haeckerfelix.Fragments
 
+environment:
+  OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
+
 apps:
   fragments:
     command: usr/bin/fragments
@@ -32,18 +35,30 @@ parts:
       - --without-gtk
       - --without-cli
       - --enable-daemon
-      - --disable-nls
       - --prefix /usr
-      - --disable-dependency-tracking
+    build-packages:
+      - libcurl4-openssl-dev
+      - libssl-dev
+      - libevent-dev
+      - libminiupnpc-dev
+      - intltool
+      - pkg-config
+      - zlib1g-dev
     override-build: |
-      patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
+      patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
+      patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/transmission.patch
       craftctl default
+      mkdir -p $CRAFT_PART_INSTALL/etc
+      cp $CRAFT_PROJECT_DIR/openssl.cnf $CRAFT_PART_INSTALL/etc/openssl.cnf
+    stage-packages:
+      - libcurl4
+      - libevent-2.1-7
+      - libminiupnpc17
 
   fragments:
     plugin: meson
     source: https://gitlab.gnome.org/World/Fragments.git
     source-type: git
-    source-tag: "2.0.2"
     parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
     after: [rustup]
     build-environment:
@@ -65,15 +80,6 @@ parts:
       - cmake
       - meson
       - ninja-build
-      - libcurl4-openssl-dev
-      - libssl-dev
-      - libevent-dev
-      - libappindicator-dev
-      - wget
-    stage-packages:
-      - libcurl4
-      - libevent-2.1-7
-      - libminiupnpc17
 
   rustup:
     plugin: nil

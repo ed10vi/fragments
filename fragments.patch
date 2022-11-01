@@ -1,44 +1,36 @@
 diff -Naur a/data/de.haeckerfelix.Fragments.desktop.in.in b/data/de.haeckerfelix.Fragments.desktop.in.in
---- a/data/de.haeckerfelix.Fragments.desktop.in.in	2022-10-26 08:54:59.443283521 +0200
-+++ b/data/de.haeckerfelix.Fragments.desktop.in.in	2022-10-26 12:31:11.047207595 +0200
-@@ -9,7 +9,7 @@
- DBusActivatable=true
- MimeType=x-scheme-handler/magnet;application/x-bittorrent;
+--- a/data/de.haeckerfelix.Fragments.desktop.in.in	2022-10-27 09:00:58.913555342 +0200
++++ b/data/de.haeckerfelix.Fragments.desktop.in.in	2022-10-27 09:03:43.039630069 +0200
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Name=@NAME@
  # Translators: Do NOT translate or transliterate this text (this is an icon file name)!
--Icon=@icon@
-+Icon=snap.fragments.@icon@
- Categories=GNOME;GTK;Utility;
- Keywords=bittorrent;torrent;magnet;download;p2p;
- # Translators: Do NOT translate or transliterate this text (these are enum types)!
+-Icon=@APP_ID@
++Icon=snap.fragments.@APP_ID@
+ Exec=@PKGNAME@
+ Terminal=false
+ Type=Application
 diff -Naur a/data/de.haeckerfelix.Fragments.metainfo.xml.in.in b/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
---- a/data/de.haeckerfelix.Fragments.metainfo.xml.in.in	2022-10-26 08:54:43.931157537 +0200
-+++ b/data/de.haeckerfelix.Fragments.metainfo.xml.in.in	2022-10-26 08:58:10.112680388 +0200
+--- a/data/de.haeckerfelix.Fragments.metainfo.xml.in.in	2022-10-27 09:01:07.145662866 +0200
++++ b/data/de.haeckerfelix.Fragments.metainfo.xml.in.in	2022-10-27 09:04:06.979664799 +0200
 @@ -2,6 +2,7 @@
  <!-- Copyright 2022 Felix Häcker -->
  <component type="desktop-application">
-   <id>de.haeckerfelix.Fragments</id>
+   <id>@APP_ID@</id>
 +  <icon type="stock">snap.fragments.de.haeckerfelix.Fragments</icon>
-   <name>Fragments</name>
+   <name>@NAME@</name>
    <summary>A BitTorrent Client</summary>
-   <translation type="gettext">fragments</translation>
+   <translation type="gettext">@PKGNAME@</translation>
 diff -Naur a/src/main.rs b/src/main.rs
---- a/src/main.rs	2022-10-21 18:42:53.607218019 +0200
-+++ b/src/main.rs	2022-10-21 18:42:49.463183260 +0200
-@@ -59,10 +59,13 @@
-     textdomain(config::PKGNAME).unwrap();
+--- a/src/main.rs	2022-10-27 09:01:17.557800000 +0200
++++ b/src/main.rs	2022-10-27 09:03:12.599388741 +0200
+@@ -58,7 +58,8 @@
  
-     // Load gresources
--    let res = gio::Resource::load(
--        config::PKGDATADIR.to_owned() + &format!("/{}.gresource", config::APP_ID),
--    )
--    .expect("Could not load resources");
-+    let path = &format!(
-+        "{}/{}/{}.gresource",
+     // Load app resources
+     let path = &format!(
+-        "{}/{}/{}.gresource",
++        "{}/{}/{}/{}.gresource",
 +        std::env::var("SNAP").unwrap(),
-+        config::PKGDATADIR.to_owned(),
-+        config::APP_ID
-+    );
-+    let res = gio::Resource::load(path).expect("Could not load resources");
-     gio::resources_register(&res);
- 
-     glib::set_application_name(config::NAME);
+         config::DATADIR,
+         config::PKGNAME,
+         config::APP_ID
