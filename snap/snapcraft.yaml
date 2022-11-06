@@ -80,6 +80,7 @@ parts:
       - cmake
       - meson
       - ninja-build
+      - libfreetype6-dev
 
   rustup:
     plugin: nil
