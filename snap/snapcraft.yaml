@@ -64,6 +64,7 @@ parts:
     build-environment:
       - RUSTUP_HOME: $CRAFT_STAGE/usr/share/rust
       - CARGO_HOME: $CRAFT_STAGE/usr/share/rust
+      - CARGO_BUILD_JOBS: $CRAFT_PARALLEL_BUILD_COUNT
     meson-parameters:
       - --prefix=/usr
     override-build: |
@@ -88,6 +89,7 @@ parts:
     build-environment:
       - RUSTUP_HOME: $CRAFT_PART_INSTALL/usr/share/rust
       - CARGO_HOME: $CRAFT_PART_INSTALL/usr/share/rust
+      - CARGO_BUILD_JOBS: $CRAFT_PARALLEL_BUILD_COUNT
     override-pull: |
       wget https://sh.rustup.rs -O $CRAFT_PART_SRC/rustup-init.sh
       chmod +x $CRAFT_PART_SRC/rustup-init.sh
