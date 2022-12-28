@@ -59,7 +59,6 @@ parts:
     plugin: meson
     source: https://gitlab.gnome.org/World/Fragments.git
     source-type: git
-    source-tag: "2.1"
     parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
     after: [rustup]
     build-environment:
