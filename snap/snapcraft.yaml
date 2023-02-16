@@ -109,6 +109,7 @@ parts:
     after:
       - fragments
       - transmission
+      - rustup
     plugin: nil
     build-snaps:
       - gnome-42-2204
