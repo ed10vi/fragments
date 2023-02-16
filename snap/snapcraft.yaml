@@ -13,7 +13,7 @@ slots:
 
 environment:
   OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
-  HOME: "$SNAP_REAL_HOME"
+  HOME: ${SNAP_REAL_HOME}
 
 apps:
   fragments:
@@ -105,18 +105,17 @@ parts:
     override-prime: |
       echo 'Skip Prime'
   
-  cleanup:
-    after:  # Make this part run last; list all your other parts here
+  cleanup: # https://forum.snapcraft.io/t/reducing-the-size-of-desktop-snaps/17280
+    after:
       - fragments
-      - rustup
       - transmission
     plugin: nil
-    build-snaps:  # List all content-snaps and base snaps you're using here
+    build-snaps:
       - gnome-42-2204
       - gnome-42-2204-sdk
       - core22
     override-prime: |
       set -eux
-      for snap in "core22" "gnome-42-2204" "gnome-42-2204-sdk"; do  # List all content-snaps and base snaps you're using here
+      for snap in "core22" "gnome-42-2204" "gnome-42-2204-sdk"; do
         cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
       done
