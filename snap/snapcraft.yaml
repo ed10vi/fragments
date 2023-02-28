@@ -3,6 +3,7 @@ adopt-info: fragments
 grade: stable
 confinement: strict
 base: core22
+compression: lzo
 
 slots:
   dbus:
@@ -12,6 +13,7 @@ slots:
 
 environment:
   OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
+  HOME: ${SNAP_REAL_HOME}
 
 apps:
   fragments:
@@ -102,3 +104,24 @@ parts:
       done
     override-prime: |
       echo 'Skip Prime'
+  
+  cleanup: # https://forum.snapcraft.io/t/reducing-the-size-of-desktop-snaps/17280
+    after:
+      - fragments
+      - transmission
+      - rustup
+    plugin: nil
+    build-snaps:
+      - gnome-42-2204
+      - gnome-42-2204-sdk
+      - core22
+    override-prime: |
+      set -eux
+      for snap in "core22" "gnome-42-2204" "gnome-42-2204-sdk"; do
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      done
+      for CRUFT in lintian man; do
+        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
+      done
+      find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
+      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
