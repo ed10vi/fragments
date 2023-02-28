@@ -120,3 +120,8 @@ parts:
       for snap in "core22" "gnome-42-2204" "gnome-42-2204-sdk"; do
         cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
       done
+      for CRUFT in lintian man; do
+        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
+      done
+      find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
+      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
