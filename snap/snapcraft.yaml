@@ -26,6 +26,7 @@ apps:
       - mount-observe
       - home
       - removable-media
+      - desktop
 
 parts:
   transmission:
