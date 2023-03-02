@@ -13,7 +13,6 @@ slots:
 
 environment:
   OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
-  HOME: ${SNAP_REAL_HOME}
 
 apps:
   fragments:
