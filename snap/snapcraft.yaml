@@ -71,6 +71,7 @@ parts:
     meson-parameters:
       - --prefix=/usr
     override-build: |
+      cargo update -p gtk4 --manifest-path $CRAFT_PART_SRC/Cargo.toml
       patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/fragments.patch
       craftctl default
     override-prime: |
