@@ -24,9 +24,6 @@ apps:
       - network
       - network-bind
       - mount-observe
-      - home
-      - removable-media
-      - desktop
 
 parts:
   transmission:
@@ -45,8 +42,6 @@ parts:
       - libevent-dev
       - libminiupnpc-dev
       - intltool
-      - pkg-config
-      - zlib1g-dev
     override-build: |
       patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
       patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/transmission.patch
@@ -63,7 +58,7 @@ parts:
     source: https://gitlab.gnome.org/World/Fragments.git
     source-type: git
     source-tag: "2.1"
-    parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
+    #parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
     after: [rustup]
     build-environment:
       - RUSTUP_HOME: $CRAFT_STAGE/usr/share/rust
@@ -82,11 +77,6 @@ parts:
       for i in `find meta/gui/icons -name "*.svg" -o -name "*.png"`; do
         mv $i "`dirname $i`/snap.$CRAFT_PROJECT_NAME.`basename $i`"
       done
-    build-packages:
-      - cmake
-      - meson
-      - ninja-build
-      - libfreetype6-dev
 
   rustup:
     plugin: nil
@@ -115,11 +105,11 @@ parts:
     plugin: nil
     build-snaps:
       - gnome-42-2204
-      - gnome-42-2204-sdk
+      - gtk-common-themes
       - core22
     override-prime: |
       set -eux
-      for snap in "core22" "gnome-42-2204" "gnome-42-2204-sdk"; do
+      for snap in "core22" "gnome-42-2204" "gtk-common-themes"; do
         cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
       done
       for CRUFT in lintian man; do
