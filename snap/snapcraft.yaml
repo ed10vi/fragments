@@ -23,7 +23,8 @@ apps:
     plugs:
       - network
       - network-bind
-      - mount-observe
+      - home
+      - removable-media
 
 parts:
   transmission:
