@@ -69,9 +69,12 @@ parts:
       - zlib1g-dev
     meson-parameters:
       - --prefix=/usr
+    override-pull: |
+      craftctl default
+      patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/fragments.patch
+      sed -i 's/Exec=@PKGNAME@/Exec=@PKGNAME@ %u/g' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
     override-build: |
       cargo update -p gtk4 --manifest-path $CRAFT_PART_SRC/Cargo.toml
-      patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/fragments.patch
       craftctl default
     override-prime: |
       craftctl default
