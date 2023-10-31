@@ -12,7 +12,6 @@ slots:
     name: de.haeckerfelix.Fragments
 
 environment:
-  OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
   GDK_DEBUG: 'portals'
 
 apps:
