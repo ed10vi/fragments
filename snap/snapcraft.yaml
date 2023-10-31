@@ -11,9 +11,6 @@ slots:
     bus: session
     name: de.haeckerfelix.Fragments
 
-environment:
-  GDK_DEBUG: 'portals'
-
 apps:
   fragments:
     command: usr/bin/fragments
