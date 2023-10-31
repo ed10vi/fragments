@@ -28,27 +28,26 @@ apps:
 
 parts:
   transmission:
-    plugin: autotools
+    plugin: cmake
     source: https://github.com/transmission/transmission.git
     source-type: git
-    source-tag: "3.00"
-    autotools-configure-parameters:
-      - --without-gtk
-      - --without-cli
-      - --enable-daemon
-      - --prefix /usr
+    source-tag: "4.0.4"
+    cmake-parameters:
+      - -DENABLE_CLI=OFF
+      - -DENABLE_TESTS=OFF
+      - -DENABLE_MAC=OFF
+      - -DENABLE_DAEMON=ON
+      - -DENABLE_GTK=OFF
+      - -DCMAKE_INSTALL_PREFIX=/usr
     build-packages:
       - libcurl4-openssl-dev
       - libssl-dev
       - libevent-dev
       - libminiupnpc-dev
       - intltool
-    override-build: |
-      patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
-      patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/transmission.patch
+    override-pull: |
       craftctl default
-      mkdir -p $CRAFT_PART_INSTALL/etc
-      cp $CRAFT_PROJECT_DIR/openssl.cnf $CRAFT_PART_INSTALL/etc/openssl.cnf
+      curl https://gitlab.gnome.org/World/Fragments/-/raw/main/build-aux/flatpak/transmission_pdeathsig.patch | patch -p1 -d $CRAFT_PART_SRC
     stage-packages:
       - libcurl4
       - libevent-2.1-7
