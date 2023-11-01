@@ -60,6 +60,7 @@ parts:
       - CARGO_HOME: $CRAFT_STAGE/usr/share/rust
       - CARGO_BUILD_JOBS: $CRAFT_PARALLEL_BUILD_COUNT
     build-packages:
+      - curl
       - zlib1g-dev
     meson-parameters:
       - --prefix=/usr
