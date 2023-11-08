@@ -7,7 +7,7 @@ diff -Naur a/data/de.haeckerfelix.Fragments.desktop.in.in b/data/de.haeckerfelix
  Name=@NAME@
 -Icon=@APP_ID@
 +Icon=snap.fragments.@APP_ID@
- Exec=@PKGNAME@
+ Exec=@PKGNAME@ %U
  Terminal=false
  Type=Application
 diff -Naur a/data/de.haeckerfelix.Fragments.metainfo.xml.in.in b/data/de.haeckerfelix.Fragments.metainfo.xml.in.in
