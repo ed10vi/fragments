@@ -67,7 +67,6 @@ parts:
     override-pull: |
       craftctl default
       patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/fragments.patch
-      sed -i 's/Exec=@PKGNAME@/Exec=@PKGNAME@ %u/g' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
     override-prime: |
       craftctl default
       mkdir -p meta/gui
