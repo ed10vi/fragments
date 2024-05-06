@@ -9,6 +9,8 @@ jobs:
         submodules: true
     - uses: snapcore/action-build@v1
       id: snapcraft
+      env:
+        SNAPCRAFT_ENABLE_EXPERIMENTAL_EXTENSIONS: '1'
     - uses: actions/upload-artifact@v3
       with:
         name: snap
