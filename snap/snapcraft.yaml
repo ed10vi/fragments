@@ -2,7 +2,7 @@ name: fragments
 adopt-info: fragments
 grade: stable
 confinement: strict
-base: core22
+base: core24
 compression: lzo
 
 slots:
@@ -10,10 +10,6 @@ slots:
     interface: dbus
     bus: session
     name: de.haeckerfelix.Fragments
-
-environment:
-  OPENSSL_CONF: ${SNAP}/etc/openssl.cnf
-  GDK_DEBUG: 'portals'
 
 apps:
   fragments:
@@ -28,27 +24,26 @@ apps:
 
 parts:
   transmission:
-    plugin: autotools
+    plugin: cmake
     source: https://github.com/transmission/transmission.git
     source-type: git
-    source-tag: "3.00"
-    autotools-configure-parameters:
-      - --without-gtk
-      - --without-cli
-      - --enable-daemon
-      - --prefix /usr
+    source-tag: "4.0.6"
+    cmake-parameters:
+      - -DENABLE_CLI=OFF
+      - -DENABLE_TESTS=OFF
+      - -DENABLE_MAC=OFF
+      - -DENABLE_DAEMON=ON
+      - -DENABLE_GTK=OFF
+      - -DCMAKE_INSTALL_PREFIX=/usr
     build-packages:
       - libcurl4-openssl-dev
       - libssl-dev
       - libevent-dev
       - libminiupnpc-dev
       - intltool
-    override-build: |
-      patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/flatpak/transmission_pdeathsig.patch
-      patch -p1 -d $CRAFT_PART_BUILD < $CRAFT_PROJECT_DIR/transmission.patch
+    override-pull: |
       craftctl default
-      mkdir -p $CRAFT_PART_INSTALL/etc
-      cp $CRAFT_PROJECT_DIR/openssl.cnf $CRAFT_PART_INSTALL/etc/openssl.cnf
+      curl https://gitlab.gnome.org/World/Fragments/-/raw/main/build-aux/flatpak/transmission_pdeathsig.patch | patch -p1 -d $CRAFT_PART_SRC
     stage-packages:
       - libcurl4
       - libevent-2.1-7
@@ -58,7 +53,7 @@ parts:
     plugin: meson
     source: https://gitlab.gnome.org/World/Fragments.git
     source-type: git
-    source-tag: "2.1.1"
+    source-tag: "3.0.1"
     parse-info: [usr/share/metainfo/de.haeckerfelix.Fragments.metainfo.xml]
     after: [rustup]
     build-environment:
@@ -66,16 +61,13 @@ parts:
       - CARGO_HOME: $CRAFT_STAGE/usr/share/rust
       - CARGO_BUILD_JOBS: $CRAFT_PARALLEL_BUILD_COUNT
     build-packages:
+      - curl
       - zlib1g-dev
     meson-parameters:
       - --prefix=/usr
     override-pull: |
       craftctl default
       patch -p1 -d $CRAFT_PART_SRC < $CRAFT_PROJECT_DIR/fragments.patch
-      sed -i 's/Exec=@PKGNAME@/Exec=@PKGNAME@ %u/g' $CRAFT_PART_SRC/data/de.haeckerfelix.Fragments.desktop.in.in
-    override-build: |
-      cargo update -p gtk4 --manifest-path $CRAFT_PART_SRC/Cargo.toml
-      craftctl default
     override-prime: |
       craftctl default
       mkdir -p meta/gui
@@ -102,7 +94,7 @@ parts:
       done
     override-prime: |
       echo 'Skip Prime'
-  
+
   cleanup: # https://forum.snapcraft.io/t/reducing-the-size-of-desktop-snaps/17280
     after:
       - fragments
@@ -110,16 +102,16 @@ parts:
       - rustup
     plugin: nil
     build-snaps:
-      - gnome-42-2204
+      - gnome-46-2404
       - gtk-common-themes
-      - core22
+      - core24
     override-prime: |
       set -eux
-      for snap in "core22" "gnome-42-2204" "gtk-common-themes"; do
-        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$SNAPCRAFT_PRIME/{}" \;
+      for snap in "core24" "gnome-46-2404" "gtk-common-themes"; do
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -f "$CRAFT_PRIME/{}" \;
       done
       for CRUFT in lintian man; do
-        rm -rf $SNAPCRAFT_PRIME/usr/share/$CRUFT
+        rm -rf $CRAFT_PRIME/usr/share/$CRUFT
       done
-      find $SNAPCRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
-      find $SNAPCRAFT_PRIME/usr/share -type d -empty -delete
+      find $CRAFT_PRIME/usr/share/doc/ -type f -not -name 'copyright' -delete
+      find $CRAFT_PRIME/usr/share -type d -empty -delete
