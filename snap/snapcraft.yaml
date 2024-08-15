@@ -43,7 +43,7 @@ parts:
       - intltool
     override-pull: |
       craftctl default
-      curl https://gitlab.gnome.org/World/Fragments/-/raw/main/build-aux/flatpak/transmission_pdeathsig.patch | patch -p1 -d $CRAFT_PART_SRC
+      curl https://gitlab.gnome.org/World/Fragments/-/raw/main/build-aux/transmission_pdeathsig.patch | patch -p1 -d $CRAFT_PART_SRC
     stage-packages:
       - libcurl4
       - libevent-2.1-7
